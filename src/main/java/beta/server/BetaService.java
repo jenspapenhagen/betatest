@@ -11,7 +11,7 @@ import java.util.Comparator;
 import javax.ejb.Stateless;
 
 /**
- * Allows storage of objects.
+ * Allows storage of objects. ONLY for Testing
  *
  * @author oliver.guenther
  */
