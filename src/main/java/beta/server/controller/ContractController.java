@@ -16,6 +16,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,15 @@ public class ContractController implements Serializable {
 
     public List<Contact> getContacts() {
         return contacts;
+    }
+
+    //testing mircoprofile externa config
+    @Inject
+    @ConfigProperty(name = "message")
+    private String message;
+
+    public String getMessage() {
+        return this.message;
     }
 
     @PostConstruct

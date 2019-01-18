@@ -43,6 +43,8 @@ public class ArquillianProjectArchive {
                 .addClass(Utils.class)
                 .addClass(Coordinate.class) // Need this cause of the maven resolver is part of the deployment
                 .addAsResource("beta/server/assist")
+//              .addAsResource(new ClassLoaderAsset("META-INF/test-persistence.xml"), "META-INF/persistence.xml")
+//              .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsLibraries(libs);
 
         // Only way to add all files under webapp
