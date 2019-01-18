@@ -1,3 +1,5 @@
+package test;
+
 
 import beta.server.assist.GeneratedAddress;
 import beta.server.assist.Name;

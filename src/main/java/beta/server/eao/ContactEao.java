@@ -8,6 +8,7 @@ package beta.server.eao;
 import beta.server.assist.SingletonDatabase;
 import beta.server.entity.Address;
 import beta.server.entity.Contact;
+import java.util.ArrayList;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,8 @@ import java.util.stream.Stream;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -28,6 +31,8 @@ public class ContactEao {
     @Inject
     private SingletonDatabase db;
 
+    private final Logger L = LoggerFactory.getLogger(ContactEao.class);
+    
     /**
      * Returns a random contact.
      *
@@ -35,8 +40,8 @@ public class ContactEao {
      */
     public Contact findAny() {
         Random r = new Random();
-        int size = db.allContacts.size();
-        return db.allContacts.get(r.nextInt(size));
+        int size = db.allContacts().size();
+        return db.allContacts().get(r.nextInt(size));
     }
 
     /**
@@ -45,7 +50,8 @@ public class ContactEao {
      * @return all contacts.
      */
     public List<Contact> findAll() {
-        return db.allContacts;
+          L.info("Hashcode in findall {} ", System.identityHashCode(db.allContacts()));
+        return new ArrayList<>(db.allContacts());
     }
 
     /**
