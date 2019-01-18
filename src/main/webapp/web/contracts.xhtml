@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>beta</title>
+
+    </h:head>
+    <h:body>
+        <p:dataTable id="dataTable" var="contact" value="#{contractController.contacts}">
+            <p:column headerText="Vorname">
+                <h:outputText value="#{contact.firstName}" />
+            </p:column>
+
+            <p:column headerText="Nachname">
+                <h:outputText value="#{contact.lastName}" />
+            </p:column>
+
+            <p:column headerText="Anschrift">
+                <h:outputText value="#{contractController.getFirstStreet(contact)}" />
+            </p:column>
+
+            <p:column headerText="Postleitzahl">
+                <h:outputText value="#{contractController.getFirstZipCode(contact)}" />
+            </p:column>
+        </p:dataTable>
+    </h:body>
+
+
+</html>
