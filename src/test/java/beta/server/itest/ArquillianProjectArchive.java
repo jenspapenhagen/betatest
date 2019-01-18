@@ -19,8 +19,10 @@ import static org.jboss.shrinkwrap.resolver.api.maven.ScopeType.RUNTIME;
 import org.jboss.shrinkwrap.resolver.api.maven.coordinate.MavenDependencies;
 
 /**
+ * deploying a WebArchive with Arquillian that can be easly extends in Test
+ * Classes
  *
- * @author jay
+ * @author jens papenhagen
  */
 public class ArquillianProjectArchive {
 
@@ -43,8 +45,8 @@ public class ArquillianProjectArchive {
                 .addClass(Utils.class)
                 .addClass(Coordinate.class) // Need this cause of the maven resolver is part of the deployment
                 .addAsResource("beta/server/assist")
-//              .addAsResource(new ClassLoaderAsset("META-INF/test-persistence.xml"), "META-INF/persistence.xml")
-//              .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                //              .addAsResource(new ClassLoaderAsset("META-INF/test-persistence.xml"), "META-INF/persistence.xml")
+                //              .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsLibraries(libs);
 
         // Only way to add all files under webapp

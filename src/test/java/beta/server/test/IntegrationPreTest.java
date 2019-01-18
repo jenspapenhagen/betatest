@@ -5,10 +5,10 @@ package beta.server.test;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
+ * First IntegrationPreTest
  *
- * @author jay
+ * @author jens papenhagen
  */
 import beta.server.itest.WebIT;
 import org.assertj.core.api.Assertions;
