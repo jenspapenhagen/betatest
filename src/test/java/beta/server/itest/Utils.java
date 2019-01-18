@@ -39,20 +39,17 @@ public class Utils {
             em.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
 
             List<String> tables = em.createNativeQuery("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA='PUBLIC'").getResultList();
-            tables.stream().map((table) -> {
+            tables.stream().forEach((table) -> {
                 L.debug("Truncating Table {}", table);
-                return table;
-            }).forEachOrdered((table) -> {
                 em.createNativeQuery("TRUNCATE TABLE " + table).executeUpdate();
             });
 
             List<String> sequences = em.createNativeQuery("SELECT SEQUENCE_NAME FROM INFORMATION_SCHEMA.SEQUENCES WHERE SEQUENCE_SCHEMA='PUBLIC'").getResultList();
-            sequences.stream().map((sequence) -> {
+            sequences.stream().forEach((sequence) -> {
                 L.debug("Resetting Sequence {}", sequence);
-                return sequence;
-            }).forEachOrdered((sequence) -> {
                 em.createNativeQuery("ALTER SEQUENCE " + sequence + " RESTART WITH 1").executeUpdate();
             });
+            
             L.debug("Enabling foraign key constraints");
             em.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
         }
