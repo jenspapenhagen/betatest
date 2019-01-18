@@ -46,11 +46,6 @@ public class ContractController implements Serializable {
             L.error("EAO is empty");
         }
 
-        List<Contact> find = eao.find("Hans");
-        for (Contact contact : find) {
-            L.info(contact.toHtml());
-        }
-
         contacts.addAll(eao.findAll());
         L.debug("Having {} in the Contact List", contacts.size());
     }

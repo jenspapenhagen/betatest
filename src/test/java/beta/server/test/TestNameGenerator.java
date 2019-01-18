@@ -1,4 +1,4 @@
-package test;
+package beta.server.test;
 
 
 import beta.server.assist.GeneratedAddress;

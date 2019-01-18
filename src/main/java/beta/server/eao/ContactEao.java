@@ -6,18 +6,17 @@
 package beta.server.eao;
 
 import beta.server.assist.SingletonDatabase;
-import beta.server.entity.Address;
 import beta.server.entity.Contact;
 import java.util.ArrayList;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +31,7 @@ public class ContactEao {
     private SingletonDatabase db;
 
     private final Logger L = LoggerFactory.getLogger(ContactEao.class);
-    
+
     /**
      * Returns a random contact.
      *
@@ -50,7 +49,7 @@ public class ContactEao {
      * @return all contacts.
      */
     public List<Contact> findAll() {
-          L.info("Hashcode in findall {} ", System.identityHashCode(db.allContacts()));
+        L.info("Hashcode in findall {} ", System.identityHashCode(db.allContacts()));
         return new ArrayList<>(db.allContacts());
     }
 
@@ -63,11 +62,11 @@ public class ContactEao {
      * within a range.
      */
     public List<Contact> findAll(int start, int limit) {
-        if (start >= db.allContacts.size()) {
+        if (start >= db.allContacts().size()) {
             return null;
         }
 
-        return db.allContacts.subList(start, limit);
+        return db.allContacts().subList(start, limit);
     }
 
     /**
@@ -77,37 +76,72 @@ public class ContactEao {
      * @return a List of Contact with this SearchString
      */
     public List<Contact> find(String searchString) {
-        System.out.println("find: " + db.allContacts.size());
-        List<Contact> firstNameList = db.allContacts.stream()
+        L.debug("find: " + db.allContacts().size());
+        List<Contact> firstNameList = db.allContacts().stream()
                 .filter(c -> c.getFirstName().contains(searchString))
                 .collect(Collectors.toList());
 
-        List<Contact> lastNameList = db.allContacts.stream()
+        List<Contact> lastNameList = db.allContacts().stream()
                 .filter(c -> c.getLastName().contains(searchString))
                 .collect(Collectors.toList());
 
-        db.allContacts.stream().flatMap(c -> c.getAddresses().stream().filter(a -> a.getStreet().contains(searchString)));
+        List<Contact> streetNameList = findByStreetName(searchString);
+        List<Contact> findByZipCode = findByZipCode(searchString);
 
-        Map<Contact, List<Address>> collect = db.allContacts.stream().collect(Collectors.toMap(c -> c,
+        //first concat first and lastName List together
+        List<Contact> outputFullNames = Stream.concat(firstNameList.stream(), lastNameList.stream())
+                .collect(Collectors.toList());
+
+        //adding Streetname List this list
+        List<Contact> withStreetNames = Stream.concat(outputFullNames.stream(), streetNameList.stream())
+                .collect(Collectors.toList());
+
+        return Stream.concat(withStreetNames.stream(), findByZipCode.stream())
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Find all Contact in List with given StreetName
+     *
+     * @param searchString
+     * @return List<Contact> with this StreetName
+     */
+    private List<Contact> findByStreetName(String searchString) {
+        List<Contact> streetNameList = db.allContacts().stream().collect(Collectors.toMap(c -> c,
                 c -> c.getAddresses().stream().filter(a -> a.getStreet().contains(searchString))
                         .collect(Collectors.toList())
-        ));
-
-        System.out.println("size collect" + collect.size());
-
-        List<Contact> collect1 = collect.entrySet().stream()
+        )).entrySet()
+                .stream()
                 .filter(v -> !v.getValue().isEmpty())
                 .map(c -> c.getKey())
                 .collect(Collectors.toList());
-        System.out.println("size collect1" + collect1.size());
-
-        //return the lastNameList or the compain of the 2 List
-        if (firstNameList.isEmpty()) {
-            return lastNameList;
-        } else {
-            return Stream.concat(firstNameList.stream(), lastNameList.stream())
-                    .collect(Collectors.toList());
+        L.info("size collect {}", streetNameList.size());
+        for (Contact c : streetNameList) {
+            L.info(c.toFullName());
         }
+        return streetNameList;
+    }
+
+    /**
+     * Find all Contact in List with given ZipCode
+     *
+     * @param searchString
+     * @return List<Contact> with this ZipCode
+     */
+    private List<Contact> findByZipCode(String searchString) {
+        List<Contact> zipCodeList = db.allContacts().stream().collect(Collectors.toMap(c -> c,
+                c -> c.getAddresses().stream().filter(a -> a.getZipCode().contains(searchString))
+                        .collect(Collectors.toList())
+        )).entrySet()
+                .stream()
+                .filter(v -> !v.getValue().isEmpty())
+                .map(c -> c.getKey())
+                .collect(Collectors.toList());
+        L.info("size collect {}", zipCodeList.size());
+        for (Contact c : zipCodeList) {
+            L.info(c.toFullName());
+        }
+        return zipCodeList;
     }
 
 }
