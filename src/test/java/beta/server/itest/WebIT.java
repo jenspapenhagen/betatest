@@ -2,6 +2,9 @@ package beta.server.itest;
 
 import beta.server.eao.ContactEao;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.inject.Inject;
 import org.assertj.core.api.Assertions;
 
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -18,13 +21,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
+import org.junit.Before;
+import org.slf4j.LoggerFactory;
 
 @RunWith(Arquillian.class)
 public class WebIT extends ArquillianProjectArchive {
-
-//    @Inject
-    private ContactEao contactEao;
 
     @ArquillianResource
     private URL deploymentUrl;
@@ -32,26 +33,28 @@ public class WebIT extends ArquillianProjectArchive {
     @Drone
     private WebDriver browser;
 
-    @FindBy(id = "in")
+    @FindBy(id = "dataTable")
     private WebElement inText;
 
-    @FindBy(id = "demo")
-    private WebElement demoLink;
+    private static final org.slf4j.Logger L = LoggerFactory.getLogger(WebIT.class);
 
-    @Ignore
-    @Test
-    public void findAll() throws InterruptedException {
-        Assertions.assertThat(contactEao.findAll()).as("ContactsEao.findAll()").isNotNull().isNotEmpty();
+    @Before
+    public void startingBrowser() {
+        //starting the browser
+        browser.get(deploymentUrl.toExternalForm());
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            L.error("InterruptedException on sleep {}", ex.getMessage());
+        }
     }
 
     @Test
     @RunAsClient
     public void clickDemo() throws InterruptedException {
-        browser.get(deploymentUrl.toExternalForm());
-        Thread.sleep(1000);
-        demoLink.click();
-        Thread.sleep(1000);
-        assertThat(inText.isDisplayed()).isTrue();
+        //check if there is an Datatable
+        assertThat(inText.isDisplayed()).as("datatable is not displayed").isTrue();
+        assertThat(inText.getText()).as("datatableis empty").isNotBlank();
     }
 
 }
