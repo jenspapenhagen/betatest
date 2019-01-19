@@ -25,7 +25,7 @@ import org.junit.Before;
 import org.slf4j.LoggerFactory;
 
 @RunWith(Arquillian.class)
-public class WebIT extends ArquillianProjectArchive {
+public class WebIT extends ArquillianSeleniumProjectArchive {
 
     @ArquillianResource
     private URL deploymentUrl;

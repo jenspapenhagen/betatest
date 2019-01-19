@@ -7,54 +7,49 @@ package beta.server.itest;
 
 import beta.server.BetaService;
 import java.io.File;
-
 import org.jboss.arquillian.container.test.api.Deployment;
-
 import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.ClassLoaderAsset;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.importer.ExplodedImporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-
 import org.jboss.shrinkwrap.resolver.api.Coordinate;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-
 import static org.jboss.shrinkwrap.resolver.api.maven.ScopeType.RUNTIME;
-import static org.jboss.shrinkwrap.api.Filters.exclude;
-
 import org.jboss.shrinkwrap.resolver.api.maven.coordinate.MavenDependencies;
 
 /**
- * deploying a WebArchive with Arquillian that can be easly extends in Test
- * Classes
+ * deploying a WebArchive with Arquillian/Selenium Testing, that can be easly
+ * extends in Test Classes
  *
  * @author jens papenhagen
  */
-public class ArquillianProjectArchive {
+public class ArquillianSeleniumProjectArchive {
 
     @Deployment(testable = false)
     public static WebArchive createDeployment() {
         Package projectPackage = BetaService.class.getPackage();
-        Package itestPackage = Utils.class.getPackage();
 
         File[] libs = Maven.resolver()
                 .loadPomFromFile("pom.xml")
                 .importRuntimeDependencies()
                 .addDependency(MavenDependencies.createDependency("org.assertj:assertj-core", RUNTIME, false)) // AssertJ Fluent Assertions                
                 .resolve()
-                .withTransitivity().asFile();
+                .withTransitivity()
+                .asFile();
 
-        WebArchive war = ShrinkWrap.create(WebArchive.class, "beta-itest.war")
-                .addPackages(true, exclude(itestPackage), projectPackage)
-                .addClass(ArquillianProjectArchive.class)
-                .addClass(Utils.class)
+        WebArchive war = ShrinkWrap.create(WebArchive.class, "beta-test.war")
+                .addPackages(true, Filters.excludePaths("beta.server.itest", "beta.server.test"), projectPackage)
+                .addClass(ArquillianSeleniumProjectArchive.class)
                 .addClass(Coordinate.class) // Need this cause of the maven resolver is part of the deployment
                 .addAsResource("beta/server/assist")
-                .addAsResource(new ClassLoaderAsset("META-INF/test-persistence.xml"), "META-INF/persistence.xml")
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsLibraries(libs);       
+                .addAsResource("META-INF/microprofile-config.properties")
+                .addAsLibraries(libs);
+
+        // Only way to add all files under webapp
+        war.merge(ShrinkWrap.create(GenericArchive.class).as(ExplodedImporter.class)
+                .importDirectory("src/main/webapp").as(GenericArchive.class),
+                "/", Filters.includeAll());
 
         return war;
     }
