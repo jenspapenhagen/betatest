@@ -2,8 +2,8 @@ package beta.server.test;
 
 
 import beta.server.assist.GeneratedAddress;
-import beta.server.assist.Name;
 import beta.server.assist.NameGenerator;
+import beta.server.entity.Contact;
 
 import org.junit.Test;
 import static org.assertj.core.api.Assertions.*;
@@ -36,12 +36,12 @@ public class TestNameGenerator {
     }
 
     @Test
-    public void testM() {
-        Name makeName = gen.makeName();
+    public void testMakeName() {
+        Contact makeName = gen.makeName();
         assertThat(makeName).as("null").isNotNull();
-        assertThat(makeName.getFirst()).as("firstname to short").isNotBlank();
-        assertThat(makeName.getLast()).as("lastname to short").isNotBlank();
-        assertThat(makeName.getGender()).as("no gender").isNotNull();
+        assertThat(makeName.getFirstName()).as("firstname to short").isNotBlank();
+        assertThat(makeName.getLastName()).as("lastname to short").isNotBlank();
+        assertThat(makeName.getSex()).as("no gender").isNotNull();
 
     }
 

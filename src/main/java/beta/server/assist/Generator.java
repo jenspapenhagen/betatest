@@ -9,7 +9,7 @@ import beta.server.entity.Address;
 import beta.server.entity.Communication;
 import beta.server.entity.Communication.Type;
 import beta.server.entity.Contact;
-import beta.server.entity.Sex;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -38,10 +38,11 @@ public class Generator {
     }
 
     private Contact makeContact(Contact contact, Address address, Communication communication) {
-        Name name = GEN.makeName();
-        contact.setFirstName(name.getFirst());
-        contact.setLastName(name.getLast());
-        contact.setSex(name.getGender().ordinal() == 1 ? Sex.FEMALE : Sex.MALE);
+        Contact generatedContact = GEN.makeName();
+        
+        contact.setFirstName(generatedContact.getFirstName());
+        contact.setLastName(generatedContact.getLastName());
+        contact.setSex(generatedContact.getSex());
         contact.setTitle(R.nextInt(1000) % 3 == 0 ? "Dr." : null);
         if (communication != null) {
             contact.getCommunications().add(communication);

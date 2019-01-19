@@ -16,11 +16,15 @@
  */
 package beta.server.assist;
 
+import beta.server.entity.Contact;
+import beta.server.entity.Sex;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.StringWriter;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,28 +39,23 @@ import java.util.StringTokenizer;
  */
 public class NameGenerator {
 
-    private List<String> businessEntities;
+    private List<String> businessEntities = new ArrayList<>();
 
-    private List<String> namesFemaleFirst;
+    private List<String> namesFemaleFirst = new ArrayList<>();
 
-    private List<String> namesMaleFirst;
+    private List<String> namesMaleFirst = new ArrayList<>();
 
-    private List<String> namesLast;
+    private List<String> namesLast = new ArrayList<>();
 
-    private List<String> streets;
+    private List<String> streets = new ArrayList<>();
 
-    private List<String> towns;
+    private List<String> towns = new ArrayList<>();
 
     private final Random R;
 
     public NameGenerator() throws RuntimeException {
         R = new Random();
-        businessEntities = new ArrayList<>();
-        namesFemaleFirst = new ArrayList<>();
-        namesMaleFirst = new ArrayList<>();
-        namesLast = new ArrayList<>();
-        streets = new ArrayList<>();
-        towns = new ArrayList<>();
+
         Map<String, List<String>> sources = new HashMap<>();
         sources.put("de_businesses.txt", businessEntities);
         sources.put("de_names_female_first.txt", namesFemaleFirst);
@@ -87,42 +86,50 @@ public class NameGenerator {
             return;
         }
         out.println("Business Enteties:");
-        for (String string : businessEntities) {
+        businessEntities.forEach((string) -> {
             out.println(" " + string);
-        }
+        });
         out.println("Names Female First:");
-        for (String string : namesFemaleFirst) {
+        namesFemaleFirst.forEach((string) -> {
             out.println(" " + string);
-        }
+        });
         out.println("Names Male First:");
-        for (String string : namesMaleFirst) {
+        namesMaleFirst.forEach((string) -> {
             out.println(" " + string);
-        }
+        });
         out.println("Names Last:");
-        for (String string : namesLast) {
+        namesLast.forEach((string) -> {
             out.println(" " + string);
-        }
+        });
         out.println("Streets:");
-        for (String string : streets) {
+        streets.forEach((string) -> {
             out.println(" " + string);
-        }
+        });
         out.println("Towns:");
-        for (String string : towns) {
+        towns.forEach((string) -> {
             out.println(" " + string);
-        }
+        });
     }
 
-    public Name makeName() {
+    public Contact makeName() {
         boolean female = R.nextBoolean();
-        Name.Gender gender = Name.Gender.MALE;
+        Sex gender = Sex.MALE;
         if (female) {
-            gender = Name.Gender.FEMALE;
+            gender = Sex.FEMALE;
         }
-        List<String> first = (female ? namesFemaleFirst : namesMaleFirst);
-        return new Name(
-                first.get(R.nextInt(first.size())),
-                namesLast.get(R.nextInt(namesLast.size())),
-                gender);
+
+        boolean title = R.nextBoolean();
+        String titleString = "";
+        if (title) {
+            titleString = "Dr. ";
+        }
+
+        List<String> firstName = (female ? namesFemaleFirst : namesMaleFirst);
+
+        return new Contact(gender,
+                titleString,
+                firstName.get(R.nextInt(firstName.size())),
+                namesLast.get(R.nextInt(namesLast.size())));
     }
 
     public String makeCompanyName() {
@@ -139,14 +146,6 @@ public class NameGenerator {
                 R.nextInt(300),
                 String.format("%05d", R.nextInt(100000)),
                 towns.get(R.nextInt(towns.size())));
-    }
-
-    public static void main(String[] args) {
-        NameGenerator n = new NameGenerator();
-        for (int i = 0; i < 10; i++) {
-            System.out.println(n.makeAddress());
-            System.out.println(n.makeCompanyName());
-        }
     }
 
     // Copied from IOUtils
