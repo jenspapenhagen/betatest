@@ -20,12 +20,10 @@ import java.util.Random;
  */
 public class Generator {
 
-    private final Random R = new Random();
-
-    private final NameGenerator GEN = new NameGenerator();
+    private final GeneratorFormFileSets GEN = new GeneratorFormFileSets();
 
     /**
-     * Generates a {@link Contact}. {@link Contact#prefered} is never set.
+     * Generates a {@link Contact}.
      * <p>
      * @return a generated {@link Contact}.
      */
@@ -38,12 +36,12 @@ public class Generator {
     }
 
     private Contact makeContact(Contact contact, Address address, Communication communication) {
-        Contact generatedContact = GEN.makeName();
+        Contact generatedContact = GEN.makeContact();
         
         contact.setFirstName(generatedContact.getFirstName());
         contact.setLastName(generatedContact.getLastName());
         contact.setSex(generatedContact.getSex());
-        contact.setTitle(R.nextInt(1000) % 3 == 0 ? "Dr." : null);
+        contact.setTitle(generatedContact.getTitle());
         if (communication != null) {
             contact.getCommunications().add(communication);
         }
@@ -54,7 +52,7 @@ public class Generator {
     }
 
     /**
-     * Generates a {@link Address}. {@link Address#preferedType} is never set.
+     * Generates a {@link Address}. is never set.
      * <p>
      * @return a generated {@link Contact}.
      */
@@ -67,12 +65,14 @@ public class Generator {
     }
 
     private Address makeAddress(Address address) {
-        GeneratedAddress genereratedAddress = GEN.makeAddress();
-        address.setCity(genereratedAddress.getTown());
+        Address genereratedAddress = GEN.makeAddress();
+        address.setCity(genereratedAddress.getCity());
         address.setStreet(genereratedAddress.getStreet());
-        address.setZipCode(genereratedAddress.getPostalCode());
+        address.setZipCode(genereratedAddress.getZipCode());
+        address.getCountry(); //get default DE as country
         return address;
-    }
+    }     
+   
 
     /**
      * Generates an amount of persisted {@link Address}.
@@ -113,8 +113,9 @@ public class Generator {
         return makeCommunication(new Communication(id));
     }
 
-    private Communication makeCommunication(Communication c) {
-        return makeCommunication(c, Communication.Type.values()[R.nextInt(Communication.Type.values().length)]);
+    private Communication makeCommunication(Communication communication) {
+        return makeCommunication(communication, 
+                Communication.Type.values()[new Random().nextInt(Communication.Type.values().length)]);
     }
 
     private Communication makeCommunication(Communication c, Type type) {

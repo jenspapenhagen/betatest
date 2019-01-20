@@ -16,6 +16,7 @@
  */
 package beta.server.assist;
 
+import beta.server.entity.Address;
 import beta.server.entity.Contact;
 import beta.server.entity.Sex;
 
@@ -37,9 +38,7 @@ import java.util.StringTokenizer;
  *
  * @author oliver.guenther
  */
-public class NameGenerator {
-
-    private List<String> businessEntities = new ArrayList<>();
+public class GeneratorFormFileSets {
 
     private List<String> namesFemaleFirst = new ArrayList<>();
 
@@ -53,11 +52,10 @@ public class NameGenerator {
 
     private final Random R;
 
-    public NameGenerator() throws RuntimeException {
+    public GeneratorFormFileSets() throws RuntimeException {
         R = new Random();
 
         Map<String, List<String>> sources = new HashMap<>();
-        sources.put("de_businesses.txt", businessEntities);
         sources.put("de_names_female_first.txt", namesFemaleFirst);
         sources.put("de_names_male_first.txt", namesMaleFirst);
         sources.put("de_names_last.txt", namesLast);
@@ -85,10 +83,6 @@ public class NameGenerator {
         if (out == null) {
             return;
         }
-        out.println("Business Enteties:");
-        businessEntities.forEach((string) -> {
-            out.println(" " + string);
-        });
         out.println("Names Female First:");
         namesFemaleFirst.forEach((string) -> {
             out.println(" " + string);
@@ -111,41 +105,34 @@ public class NameGenerator {
         });
     }
 
-    public Contact makeName() {
+    public Contact makeContact() {
         boolean female = R.nextBoolean();
-        Sex gender = Sex.MALE;
+        Sex gender = null;
+        List<String> firstName = null;
+
         if (female) {
             gender = Sex.FEMALE;
+            firstName = namesFemaleFirst;
+        } else {
+            gender = Sex.MALE;
+            firstName = namesMaleFirst;
         }
-
-        boolean title = R.nextBoolean();
-        String titleString = "";
-        if (title) {
-            titleString = "Dr. ";
+        
+        String title = null;
+        if (R.nextInt(1000) % 3 == 0) {
+            title = "Dr.";
         }
-
-        List<String> firstName = (female ? namesFemaleFirst : namesMaleFirst);
 
         return new Contact(gender,
-                titleString,
+                title,
                 firstName.get(R.nextInt(firstName.size())),
                 namesLast.get(R.nextInt(namesLast.size())));
     }
 
-    public String makeCompanyName() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(namesLast.get(R.nextInt(namesLast.size())))
-                .append(" ")
-                .append(businessEntities.get(R.nextInt(businessEntities.size())));
-        return sb.toString();
-    }
-
-    public GeneratedAddress makeAddress() {
-        return new GeneratedAddress(
-                streets.get(R.nextInt(streets.size())),
-                R.nextInt(300),
-                String.format("%05d", R.nextInt(100000)),
-                towns.get(R.nextInt(towns.size())));
+    public Address makeAddress() {        
+        return new Address(streets.get(R.nextInt(streets.size())) +" "+ R.nextInt(300), 
+                towns.get(R.nextInt(towns.size())) 
+                , String.format("%05d", R.nextInt(100000)));       
     }
 
     // Copied from IOUtils
