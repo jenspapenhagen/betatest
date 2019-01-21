@@ -1,18 +1,12 @@
 package beta.server.itest;
 
-import beta.server.eao.ContactEao;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.inject.Inject;
-import org.assertj.core.api.Assertions;
 
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 

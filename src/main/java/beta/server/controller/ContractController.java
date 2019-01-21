@@ -41,15 +41,6 @@ public class ContractController implements Serializable {
         return contacts;
     }
 
-    //testing mircoprofile externa config
-    @Inject
-    @ConfigProperty(name = "message")
-    private String message;
-
-    public String getMessage() {
-        return this.message;
-    }
-
     @PostConstruct
     public void init() {
         if (eao.findAll().isEmpty()) {
