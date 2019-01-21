@@ -10,12 +10,9 @@ import java.io.File;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 
-import org.jboss.shrinkwrap.api.Filters;
-import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.ClassLoaderAsset;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.importer.ExplodedImporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 
 import org.jboss.shrinkwrap.resolver.api.Coordinate;
@@ -42,7 +39,7 @@ public class ArquillianProjectArchive {
         File[] libs = Maven.resolver()
                 .loadPomFromFile("pom.xml")
                 .importRuntimeDependencies()
-                .addDependency(MavenDependencies.createDependency("org.assertj:assertj-core", RUNTIME, false)) // AssertJ Fluent Assertions                
+                .addDependency(MavenDependencies.createDependency("org.assertj:assertj-core", RUNTIME, false)) // AssertJ Fluent Assertions
                 .resolve()
                 .withTransitivity().asFile();
 
@@ -54,7 +51,7 @@ public class ArquillianProjectArchive {
                 .addAsResource("beta/server/assist")
                 .addAsResource(new ClassLoaderAsset("META-INF/test-persistence.xml"), "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsLibraries(libs);       
+                .addAsLibraries(libs);
 
         return war;
     }

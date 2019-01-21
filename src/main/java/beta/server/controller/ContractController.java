@@ -16,7 +16,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +45,6 @@ public class ContractController implements Serializable {
         if (eao.findAll().isEmpty()) {
             L.error("EAO is empty");
         }
-
         contacts.addAll(eao.findAll());
         L.debug("Having {} in the Contact List", contacts.size());
     }
