@@ -33,7 +33,7 @@ public class ArquillianSeleniumProjectArchive {
         File[] libs = Maven.resolver()
                 .loadPomFromFile("pom.xml")
                 .importRuntimeDependencies()
-                .addDependency(MavenDependencies.createDependency("org.assertj:assertj-core", RUNTIME, false)) // AssertJ Fluent Assertions                
+                .addDependency(MavenDependencies.createDependency("org.assertj:assertj-core", RUNTIME, false)) // AssertJ Fluent Assertions
                 .resolve()
                 .withTransitivity()
                 .asFile();
@@ -43,7 +43,6 @@ public class ArquillianSeleniumProjectArchive {
                 .addClass(ArquillianSeleniumProjectArchive.class)
                 .addClass(Coordinate.class) // Need this cause of the maven resolver is part of the deployment
                 .addAsResource("beta/server/assist")
-                .addAsResource("META-INF/microprofile-config.properties")
                 .addAsLibraries(libs);
 
         // Only way to add all files under webapp
