@@ -38,18 +38,20 @@ public class Utils {
             L.debug("Disabing foraign key constraints");
             em.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
 
+            @SuppressWarnings("unchecked")
             List<String> tables = em.createNativeQuery("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA='PUBLIC'").getResultList();
             tables.stream().forEach((table) -> {
                 L.debug("Truncating Table {}", table);
                 em.createNativeQuery("TRUNCATE TABLE " + table).executeUpdate();
             });
 
+            @SuppressWarnings("unchecked")
             List<String> sequences = em.createNativeQuery("SELECT SEQUENCE_NAME FROM INFORMATION_SCHEMA.SEQUENCES WHERE SEQUENCE_SCHEMA='PUBLIC'").getResultList();
             sequences.stream().forEach((sequence) -> {
                 L.debug("Resetting Sequence {}", sequence);
                 em.createNativeQuery("ALTER SEQUENCE " + sequence + " RESTART WITH 1").executeUpdate();
             });
-            
+
             L.debug("Enabling foraign key constraints");
             em.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
         }
