@@ -27,9 +27,9 @@ import org.slf4j.LoggerFactory;
  */
 @Named
 @ViewScoped
-public class ContractController implements Serializable {
+public class ContactController implements Serializable {
 
-    private static final Logger L = LoggerFactory.getLogger(ContractController.class);
+    private static final Logger L = LoggerFactory.getLogger(ContactController.class);
 
     @Inject
     private ContactEao eao;

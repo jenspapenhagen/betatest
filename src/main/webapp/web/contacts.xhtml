@@ -15,7 +15,8 @@
 
     </h:head>
     <h:body>
-        <p:dataTable id="dataTable" var="contact" value="#{contractController.contacts}">
+        <h1>Contact</h1>
+        <p:dataTable id="dataTable" var="contact" value="#{contactController.contacts}">
             <p:column headerText="Vorname">
                 <h:outputText value="#{contact.firstName}" />
             </p:column>
@@ -25,11 +26,11 @@
             </p:column>
 
             <p:column headerText="Anschrift">
-                <h:outputText value="#{contractController.getFirstStreet(contact)}" />
+                <h:outputText value="#{contactController.getFirstStreet(contact)}" />
             </p:column>
 
             <p:column headerText="Postleitzahl">
-                <h:outputText value="#{contractController.getFirstZipCode(contact)}" />
+                <h:outputText value="#{contactController.getFirstZipCode(contact)}" />
             </p:column>
         </p:dataTable>
     </h:body>
