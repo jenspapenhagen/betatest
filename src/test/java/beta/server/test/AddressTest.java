@@ -1,6 +1,5 @@
 package beta.server.test;
 
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,6 +9,7 @@ import static beta.server.entity.Country.GERMANY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * Testing the ViolationMessages
  *
  * @author lucas.huelsen
  */
@@ -24,16 +24,17 @@ public class AddressTest {
 
     @Test
     public void testGetViolationMessages() {
-        Address address = new Address();
-        address.setStreet("street");
-        address.setCity("city");
-        address.setZipCode("12345");
-        address.setCountry(GERMANY);
-//        Assert.assertEquals("Address with valid values","streee",address.getStreet());
-        
-        
-      assertThat(address.getStreet()).isNotNull().isNotBlank().hasSize(6).isEqualTo("street");
-      assertThat(address.getViolationMessage()).as("Address with valid values").isNull();
+        Address testAddress = new Address();
+        testAddress.setStreet("street");
+        testAddress.setCity("city");
+        testAddress.setZipCode("12345");
+        testAddress.setCountry(GERMANY);
+
+        assertThat(testAddress.getStreet()).as("Address without street").isNotBlank();
+        assertThat(testAddress.getStreet()).as("Address is null").isNotNull();
+        assertThat(testAddress.getStreet()).as("Address is to short").hasSize(6);
+        assertThat(testAddress.getStreet()).as("Address is not the same").isEqualTo("street");
+        assertThat(testAddress.getViolationMessage()).as("Address with valid values").isNull();
     }
 
     @Test

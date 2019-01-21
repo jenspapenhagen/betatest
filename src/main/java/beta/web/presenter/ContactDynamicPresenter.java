@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package beta.server.controller;
+package beta.web.presenter;
 
 import beta.server.eao.ContactEao;
 import beta.server.entity.Contact;
@@ -26,9 +26,9 @@ import org.slf4j.LoggerFactory;
  */
 @Named
 @ViewScoped
-public class ContactDynamicController implements Serializable {
+public class ContactDynamicPresenter implements Serializable {
 
-    private static final Logger L = LoggerFactory.getLogger(ContactDynamicController.class);
+    private static final Logger L = LoggerFactory.getLogger(ContactDynamicPresenter.class);
 
     @Inject
     private ContactEao eao;
@@ -46,8 +46,8 @@ public class ContactDynamicController implements Serializable {
         }
 
         root = new DefaultTreeNode("Root", null);
-        TreeNode node0 = new DefaultTreeNode(contact.getSex(), root);
-        TreeNode node1 = new DefaultTreeNode("Node 1", root);
+        TreeNode node0 = new DefaultTreeNode(contact.getSex().getSign(), root);
+        TreeNode node1 = new DefaultTreeNode(contact.getTitle(), root);
 
         //the title of the Root Node
         root.getChildren().add(new DefaultTreeNode(contact.toFullName()));

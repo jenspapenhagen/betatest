@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package beta.server.controller;
+package beta.web.presenter;
 
 import beta.server.eao.ContactEao;
 import beta.server.entity.Address;
@@ -29,9 +29,9 @@ import org.slf4j.LoggerFactory;
  */
 @Named
 @ViewScoped
-public class ContactController implements Serializable {
+public class ContactPresenter implements Serializable {
 
-    private static final Logger L = LoggerFactory.getLogger(ContactController.class);
+    private static final Logger L = LoggerFactory.getLogger(ContactPresenter.class);
 
     @Inject
     private ContactEao eao;

@@ -47,6 +47,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/web/contacts.xhtml</welcome-file>
+        <welcome-file>faces/beta/Contacts.xhtml</welcome-file>
     </welcome-file-list>
 </web-app>
