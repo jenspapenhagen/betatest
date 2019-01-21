@@ -42,6 +42,7 @@ public class ContractController implements Serializable {
     }
 
     //testing mircoprofile externa config
+    //in a extra bran.
     @Inject
     @ConfigProperty(name = "message")
     private String message;
