@@ -9,6 +9,7 @@ import beta.server.eao.ContactEao;
 import beta.server.entity.Contact;
 import beta.server.itest.ArquillianProjectArchive;
 import beta.server.itest.Utils;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -55,6 +56,13 @@ public class ContactEaoIT extends ArquillianProjectArchive {
     public void testFindAny() {
         Contact contact = eao.findAny();
         assertThat(contact).as("Contact is null").isNotNull();
+    }
+
+    //@Test
+    public void testFindAll() {
+        List<Contact> findAll = eao.findAll();
+        assertThat(findAll).as("Contact List is null").isNotNull();
+        assertThat(findAll).as("Contact List is empty").isNotEmpty();
     }
 
 }
