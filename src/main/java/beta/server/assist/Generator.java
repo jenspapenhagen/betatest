@@ -22,6 +22,8 @@ public class Generator {
 
     private final GeneratorFormFileSets GEN = new GeneratorFormFileSets();
 
+    private final Random R = new Random();
+
     /**
      * Generates a {@link Contact}.
      * <p>
@@ -37,16 +39,22 @@ public class Generator {
 
     private Contact makeContact(Contact contact, Address address, Communication communication) {
         Contact generatedContact = GEN.makeContact();
-        
+
         contact.setFirstName(generatedContact.getFirstName());
         contact.setLastName(generatedContact.getLastName());
         contact.setSex(generatedContact.getSex());
         contact.setTitle(generatedContact.getTitle());
         if (communication != null) {
             contact.getCommunications().add(communication);
+            for (int i = 0; i < R.nextInt(5); i++) {
+                contact.getCommunications().add(makeCommunication());
+            }
         }
         if (address != null) {
             contact.getAddresses().add(address);
+            for (int i = 0; i < R.nextInt(5); i++) {
+                contact.getAddresses().add(makeAddress());
+            }
         }
         return contact;
     }
@@ -71,8 +79,7 @@ public class Generator {
         address.setZipCode(genereratedAddress.getZipCode());
         address.getCountry(); //get default DE as country
         return address;
-    }     
-   
+    }
 
     /**
      * Generates an amount of persisted {@link Address}.
@@ -114,7 +121,7 @@ public class Generator {
     }
 
     private Communication makeCommunication(Communication communication) {
-        return makeCommunication(communication, 
+        return makeCommunication(communication,
                 Communication.Type.values()[new Random().nextInt(Communication.Type.values().length)]);
     }
 
